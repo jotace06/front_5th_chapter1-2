@@ -4,30 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>항해플러스 SNS</title>
+    <!-- GitHub Pages용 리다이렉트 스크립트 -->
     <script type="text/javascript">
       (function (l) {
-        console.log("index.html 스크립트 실행");
-        console.log("현재 URL:", l.href);
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
 
-        const params = new URLSearchParams(l.search);
-        const basePath = "/front_5th_chapter1-2";
-        const relativePath =
-          params.get("path") || l.pathname.replace(basePath, "") || "/";
-
-        console.log("상대 경로:", relativePath);
-
-        // 항상 basePath를 포함한 경로로 설정
-        const newPath = relativePath.startsWith(basePath)
-          ? relativePath
-          : basePath + (relativePath === "/" ? "" : relativePath);
-
-        console.log("새 경로:", newPath);
-
-        if (newPath !== l.pathname) {
-          window.history.replaceState(null, null, newPath);
-          console.log("경로 재설정 완료:", window.location.href);
-        } else {
-          console.log("경로 변경 불필요:", l.pathname);
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
         }
       })(window.location);
     </script>
