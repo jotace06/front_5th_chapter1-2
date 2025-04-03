@@ -1,14 +1,18 @@
 // { $el: { eventType: [handler1, handler2] } }
 const eventMap = new Map();
 
-// root에 등록된 eventTypes
-const oldEventTypes = new Set();
+// { $container: [eventType1, eventType2] }
+const containerEventTypesMap = new WeakMap();
 
-export function setupEventListeners(root) {
-  const newEventTypes = getNewEventTypes();
+export function setupEventListeners(container) {
+  if (!containerEventTypesMap.has(container)) {
+    containerEventTypesMap.set(container, new Set());
+  }
+  const oldEventTypes = containerEventTypesMap.get(container);
+  const newEventTypes = getNewEventTypes(oldEventTypes);
 
   newEventTypes.forEach((eventType) => {
-    root.addEventListener(eventType, (e) => {
+    container.addEventListener(eventType, (e) => {
       const handlerMap = eventMap.get(e.target);
       if (!handlerMap) return;
 
@@ -47,18 +51,14 @@ export function removeEvent(element, eventType, handler) {
 
   if (handlers.size === 0) {
     handlerMap.delete(eventType);
-    if (handlerMap.size === 0) {
-      eventMap.delete(element);
-    }
+  }
+
+  if (handlerMap.size === 0) {
+    eventMap.delete(element);
   }
 }
 
-export const resetEventManagerState = () => {
-  eventMap.clear();
-  oldEventTypes.clear();
-};
-
-const getNewEventTypes = () => {
+const getNewEventTypes = (oldEventTypes) => {
   const newEventTypes = new Set();
 
   eventMap.forEach((handlerMap) => {

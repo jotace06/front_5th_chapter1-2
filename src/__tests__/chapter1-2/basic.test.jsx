@@ -8,7 +8,6 @@ import {
   removeEvent,
   renderElement,
   setupEventListeners,
-  resetEventManagerState,
 } from "../../lib";
 
 describe("Chapter1-2 > 기본과제 > 가상돔 만들기 > ", () => {
@@ -288,7 +287,6 @@ describe("Chapter1-2 > 기본과제 > 가상돔 만들기 > ", () => {
     let container;
 
     beforeEach(() => {
-      resetEventManagerState();
       container = document.createElement("div");
       document.body.appendChild(container);
     });
@@ -439,7 +437,6 @@ describe("Chapter1-2 > 기본과제 > 가상돔 만들기 > ", () => {
     let container;
 
     beforeEach(() => {
-      resetEventManagerState();
       container = document.createElement("div");
       document.body.appendChild(container);
     });
@@ -491,7 +488,6 @@ describe("Chapter1-2 > 기본과제 > 가상돔 만들기 > ", () => {
     let $container;
 
     beforeEach(async () => {
-      resetEventManagerState();
       $container = document.createElement("div");
       document.body.appendChild($container);
     });
