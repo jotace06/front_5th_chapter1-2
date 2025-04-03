@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>항해플러스 SNS</title>
+
+    <!-- GitHub Pages용 리다이렉트 스크립트 -->
     <script type="text/javascript">
       (function (l) {
         if (l.search[1] === "/") {
@@ -15,14 +17,11 @@
             })
             .join("?");
 
-          var redirectUrl = l.pathname + decoded + l.hash;
-
-          // GitHub Pages 경로 처리
-          if (redirectUrl.indexOf("/front_5th_chapter1-2") !== 0) {
-            redirectUrl = "/front_5th_chapter1-2" + redirectUrl;
-          }
-
-          window.history.replaceState(null, null, redirectUrl);
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
         }
       })(window.location);
     </script>
