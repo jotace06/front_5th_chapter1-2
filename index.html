@@ -24,11 +24,12 @@
 
           console.log("디코딩된 경로:", decoded);
 
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname + decoded + l.hash,
-          );
+          // 이중 슬래시 문제 수정
+          var path = l.pathname.endsWith("/")
+            ? l.pathname.slice(0, -1)
+            : l.pathname;
+
+          window.history.replaceState(null, null, path + decoded + l.hash);
           console.log("리다이렉트 완료, 새 URL:", window.location.href);
         } else {
           console.log("리다이렉트 조건 미충족: search가 /로 시작하지 않음");
