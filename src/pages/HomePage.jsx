@@ -12,8 +12,16 @@ import { globalStore } from "../stores";
  */
 export const HomePage = () => {
   const { posts, loggedIn } = globalStore.getState();
-  const { toggleLike } = globalStore.actions;
+  const { toggleLike, addPost } = globalStore.actions;
   const { getIsLiked } = globalStore.getters;
+
+  const handleToggleLikeClick = (postId) => {
+    const state = toggleLike(postId);
+
+    if (state.error) {
+      alert(state.error.message);
+    }
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center">
@@ -22,7 +30,7 @@ export const HomePage = () => {
         <Navigation />
 
         <main className="p-4">
-          {loggedIn && <PostForm />}
+          {loggedIn && <PostForm addPost={addPost} />}
           <div id="posts-container" className="space-y-4">
             {[...posts]
               .sort((a, b) => b.time - a.time)
@@ -31,7 +39,7 @@ export const HomePage = () => {
                   <Post
                     key={post.id}
                     {...post}
-                    toggleLike={() => toggleLike(post.id)}
+                    toggleLike={() => handleToggleLikeClick(post.id)}
                     isLiked={getIsLiked(post.id)}
                   />
                 );

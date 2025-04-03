@@ -1,6 +1,6 @@
 import { createStore } from "../lib";
 import { userStorage } from "../storages";
-
+import { ERROR_TYPES, ERROR_MESSAGES } from "../errors";
 const 초 = 1000;
 const 분 = 초 * 60;
 const 시간 = 분 * 60;
@@ -51,30 +51,30 @@ export const globalStore = createStore(
   {
     logout(state) {
       userStorage.reset();
-      return { ...state, currentUser: null, loggedIn: false };
+      return { ...state, currentUser: null, loggedIn: false, error: null };
     },
-
     toggleLike(state, postId) {
-      // 로그인 상태가 아니면 경고 메시지 표시 후 현재 상태 반환
       if (!state.loggedIn) {
-        alert("로그인 후 이용해주세요");
-        return state;
+        return {
+          ...state,
+          error: {
+            type: ERROR_TYPES.AUTH_REQUIRED,
+            message: ERROR_MESSAGES.AUTH_REQUIRED,
+          },
+        };
       }
 
-      // 포스트 목록 업데이트
       const updatedPosts = state.posts.map((post) => {
         if (post.id === postId) {
           const { username } = state.currentUser;
           const isLiked = post.likeUsers.includes(username);
 
           if (isLiked) {
-            // 이미 좋아요를 눌렀으면 취소 (해당 사용자 제거)
             return {
               ...post,
               likeUsers: post.likeUsers.filter((user) => user !== username),
             };
           } else {
-            // 좋아요를 누르지 않았으면 추가
             return {
               ...post,
               likeUsers: [...post.likeUsers, username],
@@ -84,31 +84,32 @@ export const globalStore = createStore(
         return post;
       });
 
-      // 업데이트된 posts로 새 상태 반환
-      return { ...state, posts: updatedPosts };
+      return { ...state, posts: updatedPosts, error: null };
     },
 
     addPost(state, content) {
       if (!state.loggedIn || !state.currentUser) {
-        alert("로그인 후 이용해주세요");
-        return state;
+        return {
+          ...state,
+          error: {
+            type: ERROR_TYPES.AUTH_REQUIRED,
+            message: ERROR_MESSAGES.AUTH_REQUIRED,
+          },
+        };
       }
 
-      // 새 포스트 객체 생성
       const newPost = {
-        id: Date.now(), // 현재 시간을 ID로 사용 (고유값)
+        id: Date.now(),
         author: state.currentUser.username,
         time: Date.now(),
         content,
         likeUsers: [],
       };
 
-      // 새 포스트를 배열 앞에 추가하여 새 상태 반환
-      return { ...state, posts: [newPost, ...state.posts] };
+      return { ...state, posts: [newPost, ...state.posts], error: null };
     },
   },
   {
-    // 주어진 포스트 ID에 현재 사용자가 좋아요를 눌렀는지 확인하는 헬퍼 함수
     getIsLiked(state, postId) {
       if (!state.loggedIn || !state.currentUser) return false;
 

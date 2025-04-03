@@ -15,7 +15,10 @@ export const createStore = (initialState, initialActions, initialGetters) => {
   const actions = Object.fromEntries(
     Object.entries(initialActions).map(([key, value]) => [
       key,
-      (...args) => setState(value(getState(), ...args)),
+      (...args) => {
+        setState(value(getState(), ...args));
+        return getState();
+      },
     ]),
   );
 

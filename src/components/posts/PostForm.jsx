@@ -1,21 +1,25 @@
 /** @jsx createVNode */
 import { createVNode } from "../../lib";
-import { globalStore } from "../../stores";
+import { ERROR_MESSAGES } from "../../errors";
 
-export const PostForm = () => {
-  const { addPost } = globalStore.actions;
-
-  const handleSubmit = () => {
+export const PostForm = ({ addPost }) => {
+  const handleSubmitClick = () => {
     const $textarea = document.getElementById("post-content");
     const content = $textarea?.value?.trim();
 
-    if (content) {
-      addPost(content);
-
-      if ($textarea) {
-        $textarea.value = "";
-      }
+    if (!content) {
+      alert(ERROR_MESSAGES.CONTENT_EMPTY);
+      return;
     }
+
+    const state = addPost(content);
+
+    if (state.error) {
+      alert(state.error.message);
+      return;
+    }
+
+    $textarea.value = "";
   };
 
   return (
@@ -28,7 +32,7 @@ export const PostForm = () => {
       <button
         id="post-submit"
         className="mt-2 bg-blue-600 text-white px-4 py-2 rounded"
-        onClick={handleSubmit}
+        onClick={handleSubmitClick}
       >
         게시
       </button>
