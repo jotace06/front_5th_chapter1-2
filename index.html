@@ -16,12 +16,18 @@
 
         console.log("상대 경로:", relativePath);
 
-        // basePath를 유지하면서 상대 경로만 업데이트
-        const newPath = basePath + (relativePath === "/" ? "" : relativePath);
+        // 항상 basePath를 포함한 경로로 설정
+        const newPath = relativePath.startsWith(basePath)
+          ? relativePath
+          : basePath + (relativePath === "/" ? "" : relativePath);
+
+        console.log("새 경로:", newPath);
 
         if (newPath !== l.pathname) {
           window.history.replaceState(null, null, newPath);
           console.log("경로 재설정 완료:", window.location.href);
+        } else {
+          console.log("경로 변경 불필요:", l.pathname);
         }
       })(window.location);
     </script>
