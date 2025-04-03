@@ -4,30 +4,23 @@
     <meta charset="utf-8" />
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
-      console.log("404.html 리다이렉트 스크립트 실행");
-      console.log("현재 URL:", window.location.href);
-
       var pathSegmentsToKeep = 1;
       var l = window.location;
 
-      var newPath =
+      l.replace(
         l.protocol +
-        "//" +
-        l.hostname +
-        (l.port ? ":" + l.port : "") +
-        l.pathname
-          .split("/")
-          .slice(0, 1 + pathSegmentsToKeep)
-          .join("/") +
-        "/?/" +
-        l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/") +
-        (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
-        l.hash;
-
-      console.log("리다이렉트 경로 계산:", newPath);
-      console.log("리다이렉트 실행");
-
-      l.replace(newPath);
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join("/") +
+          "/?/" +
+          l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash,
+      );
     </script>
   </head>
   <body></body>
