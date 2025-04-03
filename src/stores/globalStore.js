@@ -89,6 +89,11 @@ export const globalStore = createStore(
     },
 
     addPost(state, content) {
+      if (!state.loggedIn || !state.currentUser) {
+        alert("로그인 후 이용해주세요");
+        return state;
+      }
+
       // 새 포스트 객체 생성
       const newPost = {
         id: Date.now(), // 현재 시간을 ID로 사용 (고유값)
