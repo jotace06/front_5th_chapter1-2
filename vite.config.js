@@ -18,6 +18,7 @@ function createBaseConfig(command) {
         input: {
           main: "index.html",
           hash: "index.hash.html",
+          notfound: "404.html",
         },
       },
     },

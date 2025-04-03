@@ -15,11 +15,15 @@
               return s.replace(/~and~/g, "&");
             })
             .join("?");
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname.slice(0, -1) + decoded + l.hash,
-          );
+
+          var redirectUrl = l.pathname + decoded + l.hash;
+
+          // GitHub Pages 경로 처리
+          if (redirectUrl.indexOf("/front_5th_chapter1-2") !== 0) {
+            redirectUrl = "/front_5th_chapter1-2" + redirectUrl;
+          }
+
+          window.history.replaceState(null, null, redirectUrl);
         }
       })(window.location);
     </script>
