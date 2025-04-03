@@ -1,5 +1,6 @@
 import { defineConfig as defineTestConfig, mergeConfig } from "vitest/config";
 import { defineConfig } from "vite";
+import { resolve } from "path";
 
 function createBaseConfig(command) {
   return {
@@ -16,9 +17,9 @@ function createBaseConfig(command) {
     build: {
       rollupOptions: {
         input: {
-          main: "index.html",
-          hash: "index.hash.html",
-          notfound: "404.html",
+          index: resolve(__dirname, "index.html"),
+          hash: resolve(__dirname, "index.hash.html"),
+          notFound: resolve(__dirname, "404.html"),
         },
       },
     },
