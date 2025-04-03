@@ -8,7 +8,12 @@
     <!-- GitHub Pages용 리다이렉트 스크립트 -->
     <script type="text/javascript">
       (function (l) {
+        console.log("index.html 리다이렉트 스크립트 실행");
+        console.log("현재 URL:", window.location.href);
+        console.log("search 부분:", l.search);
+
         if (l.search[1] === "/") {
+          console.log("리다이렉트 조건 충족: search가 /로 시작함");
           var decoded = l.search
             .slice(1)
             .split("&")
@@ -17,11 +22,16 @@
             })
             .join("?");
 
+          console.log("디코딩된 경로:", decoded);
+
           window.history.replaceState(
             null,
             null,
             l.pathname.slice(0, -1) + decoded + l.hash,
           );
+          console.log("리다이렉트 완료, 새 URL:", window.location.href);
+        } else {
+          console.log("리다이렉트 조건 미충족: search가 /로 시작하지 않음");
         }
       })(window.location);
     </script>
