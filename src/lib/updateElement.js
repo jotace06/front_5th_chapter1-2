@@ -20,7 +20,6 @@ function updateAttributes(target, newProps = {}, oldProps = {}) {
   // 2. 새로운 속성 추가/업데이트
   for (const key in newProps) {
     if (key.startsWith("on")) {
-      // 이벤트 핸들러 추가
       const eventType = key.slice(2).toLowerCase();
       addEvent(target, eventType, newProps[key]);
     } else if (oldProps[key] !== newProps[key]) {
