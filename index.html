@@ -27,7 +27,7 @@
           window.history.replaceState(
             null,
             null,
-            l.pathname.slice(0, -1) + decoded + l.hash,
+            l.pathname + decoded + l.hash,
           );
           console.log("리다이렉트 완료, 새 URL:", window.location.href);
         } else {
