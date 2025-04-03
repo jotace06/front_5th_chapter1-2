@@ -10,15 +10,17 @@
         console.log("현재 URL:", l.href);
 
         const params = new URLSearchParams(l.search);
-        const path =
-          params.get("path") ||
-          l.pathname.replace("/front_5th_chapter1-2", "") ||
-          "/";
+        const basePath = "/front_5th_chapter1-2";
+        const relativePath =
+          params.get("path") || l.pathname.replace(basePath, "") || "/";
 
-        console.log("설정할 경로:", path);
+        console.log("상대 경로:", relativePath);
 
-        if (path !== l.pathname) {
-          window.history.replaceState(null, null, path);
+        // basePath를 유지하면서 상대 경로만 업데이트
+        const newPath = basePath + (relativePath === "/" ? "" : relativePath);
+
+        if (newPath !== l.pathname) {
+          window.history.replaceState(null, null, newPath);
           console.log("경로 재설정 완료:", window.location.href);
         }
       })(window.location);
