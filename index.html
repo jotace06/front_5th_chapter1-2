@@ -4,35 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>항해플러스 SNS</title>
-
-    <!-- GitHub Pages용 리다이렉트 스크립트 -->
     <script type="text/javascript">
       (function (l) {
-        console.log("index.html 리다이렉트 스크립트 실행");
-        console.log("현재 URL:", window.location.href);
-        console.log("search 부분:", l.search);
+        console.log("index.html 스크립트 실행");
+        console.log("현재 URL:", l.href);
 
-        if (l.search[1] === "/") {
-          console.log("리다이렉트 조건 충족: search가 /로 시작함");
-          var decoded = l.search
-            .slice(1)
-            .split("&")
-            .map(function (s) {
-              return s.replace(/~and~/g, "&");
-            })
-            .join("?");
+        const params = new URLSearchParams(l.search);
+        const path =
+          params.get("path") ||
+          l.pathname.replace("/front_5th_chapter1-2", "") ||
+          "/";
 
-          console.log("디코딩된 경로:", decoded);
+        console.log("설정할 경로:", path);
 
-          // 이중 슬래시 문제 수정
-          var path = l.pathname.endsWith("/")
-            ? l.pathname.slice(0, -1)
-            : l.pathname;
-
-          window.history.replaceState(null, null, path + decoded + l.hash);
-          console.log("리다이렉트 완료, 새 URL:", window.location.href);
-        } else {
-          console.log("리다이렉트 조건 미충족: search가 /로 시작하지 않음");
+        if (path !== l.pathname) {
+          window.history.replaceState(null, null, path);
+          console.log("경로 재설정 완료:", window.location.href);
         }
       })(window.location);
     </script>
@@ -40,6 +27,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
