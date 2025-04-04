@@ -13,13 +13,19 @@ export function setupEventListeners(container) {
 
   newEventTypes.forEach((eventType) => {
     container.addEventListener(eventType, (e) => {
-      const handlerMap = eventMap.get(e.target);
-      if (!handlerMap) return;
+      let $eventEl = e.target;
 
-      const handlers = handlerMap.get(eventType);
-      if (!handlers) return;
+      while ($eventEl && $eventEl !== document) {
+        const handlerMap = eventMap.get($eventEl);
 
-      handlers.forEach((handler) => handler(e));
+        if (handlerMap && handlerMap.has(eventType)) {
+          const handlers = handlerMap.get(eventType);
+          handlers.forEach((handler) => handler(e));
+        }
+
+        if ($eventEl === container) break;
+        $eventEl = $eventEl.parentElement;
+      }
     });
 
     oldEventTypes.add(eventType);
