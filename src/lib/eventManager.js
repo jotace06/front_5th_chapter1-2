@@ -1,3 +1,5 @@
+import { OrderedSet } from "../utils/orderedSet";
+
 // { $el: { eventType: [handler1, handler2] } }
 const eventMap = new Map();
 
@@ -6,7 +8,7 @@ const containerEventTypesMap = new WeakMap();
 
 export function setupEventListeners(container) {
   if (!containerEventTypesMap.has(container)) {
-    containerEventTypesMap.set(container, new Set());
+    containerEventTypesMap.set(container, new OrderedSet());
   }
   const oldEventTypes = containerEventTypesMap.get(container);
   const newEventTypes = getNewEventTypes(oldEventTypes);
@@ -55,7 +57,7 @@ export function addEvent(element, eventType, handler) {
 
   const handlerMap = eventMap.get(element);
   if (!handlerMap.has(eventType)) {
-    handlerMap.set(eventType, new Set());
+    handlerMap.set(eventType, new OrderedSet());
   }
 
   const handlers = handlerMap.get(eventType);
@@ -81,7 +83,7 @@ export function removeEvent(element, eventType, handler) {
 }
 
 const getNewEventTypes = (oldEventTypes) => {
-  const newEventTypes = new Set();
+  const newEventTypes = new OrderedSet();
 
   eventMap.forEach((handlerMap) => {
     handlerMap.forEach((_, eventType) => {
