@@ -14,18 +14,34 @@ export function setupEventListeners(container) {
   newEventTypes.forEach((eventType) => {
     container.addEventListener(eventType, (e) => {
       let $eventEl = e.target;
+      let isStopPropagationCalled = false;
+
+      const originalStopPropagation = e.stopPropagation;
+      e.stopPropagation = function () {
+        isStopPropagationCalled = true;
+        originalStopPropagation.call(this);
+      };
 
       while ($eventEl && $eventEl !== document) {
         const handlerMap = eventMap.get($eventEl);
 
         if (handlerMap && handlerMap.has(eventType)) {
           const handlers = handlerMap.get(eventType);
-          handlers.forEach((handler) => handler(e));
+          handlers.forEach((handler) => {
+            try {
+              handler(e);
+            } catch (error) {
+              console.error(error);
+            }
+          });
         }
 
+        if (isStopPropagationCalled) break;
         if ($eventEl === container) break;
         $eventEl = $eventEl.parentElement;
       }
+
+      e.stopPropagation = originalStopPropagation;
     });
 
     oldEventTypes.add(eventType);
